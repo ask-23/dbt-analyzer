@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/run-results/v5.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2024-01-15T10:05:00.000000Z",
+    "elapsed_time": 850.5
+  },
+  "results": [
+    {
+      "unique_id": "model.my_project.heavy_table_model",
+      "status": "success",
+      "execution_time": 425.3,
+      "adapter_response": {
+        "rows_affected": 2500000
+      },
+      "message": "SUCCESS 1",
+      "thread_id": "Thread-1"
+    },
+    {
+      "unique_id": "model.my_project.slow_view_model",
+      "status": "success",
+      "execution_time": 387.2,
+      "adapter_response": {
+        "rows_affected": 1800000
+      },
+      "message": "SUCCESS 1",
+      "thread_id": "Thread-2"
+    }
+  ]
+}
