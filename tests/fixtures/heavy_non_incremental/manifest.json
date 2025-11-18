@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v11.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2024-01-15T10:00:00.000000Z",
+    "adapter_type": "snowflake"
+  },
+  "nodes": {
+    "model.my_project.heavy_table_model": {
+      "database": "analytics",
+      "schema": "marts",
+      "name": "heavy_table_model",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "marts/heavy_table_model.sql",
+      "original_file_path": "models/marts/heavy_table_model.sql",
+      "unique_id": "model.my_project.heavy_table_model",
+      "fqn": ["my_project", "marts", "heavy_table_model"],
+      "alias": "heavy_table_model",
+      "checksum": {"name": "sha256", "checksum": "heavy123"},
+      "config": {
+        "enabled": true,
+        "materialized": "table",
+        "tags": []
+      },
+      "tags": [],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": ["source.my_project.raw.large_dataset"]
+      },
+      "compiled_sql": "SELECT * FROM raw.large_dataset WHERE created_at >= '2023-01-01'",
+      "raw_sql": "SELECT * FROM {{ source('raw', 'large_dataset') }} WHERE created_at >= '2023-01-01'"
+    },
+    "model.my_project.slow_view_model": {
+      "database": "analytics",
+      "schema": "marts",
+      "name": "slow_view_model",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "marts/slow_view_model.sql",
+      "original_file_path": "models/marts/slow_view_model.sql",
+      "unique_id": "model.my_project.slow_view_model",
+      "fqn": ["my_project", "marts", "slow_view_model"],
+      "alias": "slow_view_model",
+      "checksum": {"name": "sha256", "checksum": "slow456"},
+      "config": {
+        "enabled": true,
+        "materialized": "view",
+        "tags": []
+      },
+      "tags": [],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": ["source.my_project.raw.events"]
+      },
+      "compiled_sql": "SELECT event_id, user_id, COUNT(*) FROM raw.events GROUP BY event_id, user_id",
+      "raw_sql": "SELECT event_id, user_id, COUNT(*) FROM {{ source('raw', 'events') }} GROUP BY event_id, user_id"
+    }
+  },
+  "sources": {
+    "source.my_project.raw.large_dataset": {
+      "database": "raw_db",
+      "schema": "raw",
+      "name": "large_dataset",
+      "resource_type": "source",
+      "package_name": "my_project",
+      "unique_id": "source.my_project.raw.large_dataset",
+      "fqn": ["my_project", "raw", "large_dataset"],
+      "source_name": "raw",
+      "source_description": "",
+      "loader": "",
+      "identifier": "large_dataset"
+    },
+    "source.my_project.raw.events": {
+      "database": "raw_db",
+      "schema": "raw",
+      "name": "events",
+      "resource_type": "source",
+      "package_name": "my_project",
+      "unique_id": "source.my_project.raw.events",
+      "fqn": ["my_project", "raw", "events"],
+      "source_name": "raw",
+      "source_description": "",
+      "loader": "",
+      "identifier": "events"
+    }
+  },
+  "child_map": {
+    "model.my_project.heavy_table_model": [],
+    "model.my_project.slow_view_model": [],
+    "source.my_project.raw.large_dataset": ["model.my_project.heavy_table_model"],
+    "source.my_project.raw.events": ["model.my_project.slow_view_model"]
+  }
+}

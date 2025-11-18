@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v11.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2024-01-15T10:00:00.000000Z",
+    "adapter_type": "snowflake"
+  },
+  "nodes": {
+    "model.my_project.stg_customers": {
+      "database": "analytics",
+      "schema": "staging",
+      "name": "stg_customers",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "staging/stg_customers.sql",
+      "original_file_path": "models/staging/stg_customers.sql",
+      "unique_id": "model.my_project.stg_customers",
+      "fqn": ["my_project", "staging", "stg_customers"],
+      "alias": "stg_customers",
+      "checksum": {"name": "sha256", "checksum": "abc123"},
+      "config": {
+        "enabled": true,
+        "materialized": "view",
+        "tags": []
+      },
+      "tags": [],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": ["source.my_project.raw.customers"]
+      },
+      "compiled_sql": "SELECT * FROM raw.customers",
+      "raw_sql": "SELECT * FROM {{ source('raw', 'customers') }}"
+    },
+    "model.my_project.stg_orders": {
+      "database": "analytics",
+      "schema": "staging",
+      "name": "stg_orders",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "staging/stg_orders.sql",
+      "original_file_path": "models/staging/stg_orders.sql",
+      "unique_id": "model.my_project.stg_orders",
+      "fqn": ["my_project", "staging", "stg_orders"],
+      "alias": "stg_orders",
+      "checksum": {"name": "sha256", "checksum": "def456"},
+      "config": {
+        "enabled": true,
+        "materialized": "view",
+        "tags": []
+      },
+      "tags": [],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": ["source.my_project.raw.orders"]
+      },
+      "compiled_sql": "SELECT * FROM raw.orders",
+      "raw_sql": "SELECT * FROM {{ source('raw', 'orders') }}"
+    },
+    "model.my_project.fct_orders": {
+      "database": "analytics",
+      "schema": "marts",
+      "name": "fct_orders",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "marts/fct_orders.sql",
+      "original_file_path": "models/marts/fct_orders.sql",
+      "unique_id": "model.my_project.fct_orders",
+      "fqn": ["my_project", "marts", "fct_orders"],
+      "alias": "fct_orders",
+      "checksum": {"name": "sha256", "checksum": "ghi789"},
+      "config": {
+        "enabled": true,
+        "materialized": "table",
+        "tags": ["marts"]
+      },
+      "tags": ["marts"],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": [
+          "model.my_project.stg_orders",
+          "model.my_project.stg_customers"
+        ]
+      },
+      "compiled_sql": "SELECT o.*, c.customer_name FROM staging.stg_orders o JOIN staging.stg_customers c ON o.customer_id = c.id",
+      "raw_sql": "SELECT o.*, c.customer_name FROM {{ ref('stg_orders') }} o JOIN {{ ref('stg_customers') }} c ON o.customer_id = c.id"
+    },
+    "model.my_project.unused_model": {
+      "database": "analytics",
+      "schema": "staging",
+      "name": "unused_model",
+      "resource_type": "model",
+      "package_name": "my_project",
+      "path": "staging/unused_model.sql",
+      "original_file_path": "models/staging/unused_model.sql",
+      "unique_id": "model.my_project.unused_model",
+      "fqn": ["my_project", "staging", "unused_model"],
+      "alias": "unused_model",
+      "checksum": {"name": "sha256", "checksum": "jkl012"},
+      "config": {
+        "enabled": true,
+        "materialized": "view",
+        "tags": []
+      },
+      "tags": [],
+      "meta": {},
+      "depends_on": {
+        "macros": [],
+        "nodes": ["source.my_project.raw.old_data"]
+      },
+      "compiled_sql": "SELECT * FROM raw.old_data",
+      "raw_sql": "SELECT * FROM {{ source('raw', 'old_data') }}"
+    }
+  },
+  "sources": {
+    "source.my_project.raw.customers": {
+      "database": "raw_db",
+      "schema": "raw",
+      "name": "customers",
+      "resource_type": "source",
+      "package_name": "my_project",
+      "unique_id": "source.my_project.raw.customers",
+      "fqn": ["my_project", "raw", "customers"],
+      "source_name": "raw",
+      "source_description": "",
+      "loader": "",
+      "identifier": "customers"
+    },
+    "source.my_project.raw.orders": {
+      "database": "raw_db",
+      "schema": "raw",
+      "name": "orders",
+      "resource_type": "source",
+      "package_name": "my_project",
+      "unique_id": "source.my_project.raw.orders",
+      "fqn": ["my_project", "raw", "orders"],
+      "source_name": "raw",
+      "source_description": "",
+      "loader": "",
+      "identifier": "orders"
+    },
+    "source.my_project.raw.old_data": {
+      "database": "raw_db",
+      "schema": "raw",
+      "name": "old_data",
+      "resource_type": "source",
+      "package_name": "my_project",
+      "unique_id": "source.my_project.raw.old_data",
+      "fqn": ["my_project", "raw", "old_data"],
+      "source_name": "raw",
+      "source_description": "",
+      "loader": "",
+      "identifier": "old_data"
+    }
+  },
+  "child_map": {
+    "model.my_project.stg_customers": ["model.my_project.fct_orders"],
+    "model.my_project.stg_orders": ["model.my_project.fct_orders"],
+    "model.my_project.fct_orders": [],
+    "model.my_project.unused_model": [],
+    "source.my_project.raw.customers": ["model.my_project.stg_customers"],
+    "source.my_project.raw.orders": ["model.my_project.stg_orders"],
+    "source.my_project.raw.old_data": ["model.my_project.unused_model"]
+  }
+}
